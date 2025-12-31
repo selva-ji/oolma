@@ -4,7 +4,8 @@ FROM gradle:8.5-jdk21-jammy AS build
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the Gradle wrapper and build filesCOPY gradlew .
+# Copy the Gradle wrapper and build files
+COPY gradlew .
 COPY gradle ./gradle
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
@@ -12,11 +13,13 @@ COPY settings.gradle.kts .
 # Copy the source code
 COPY src ./src
 
+# THIS IS THE FIX: Make the Gradle wrapper executable
+RUN chmod +x ./gradlew
+
 # Build the application and create the "fat" JAR
 RUN ./gradlew build -x test
 
 # --- Second Stage: Create the final, smaller image ---
-# THIS IS THE CORRECTED LINE:
 FROM eclipse-temurin:21-jre-alpine
 
 # Set the working directory
