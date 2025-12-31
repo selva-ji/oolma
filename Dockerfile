@@ -4,8 +4,7 @@ FROM gradle:8.5-jdk21-jammy AS build
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the Gradle wrapper and build files
-COPY gradlew .
+# Copy the Gradle wrapper and build filesCOPY gradlew .
 COPY gradle ./gradle
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
@@ -17,7 +16,8 @@ COPY src ./src
 RUN ./gradlew build -x test
 
 # --- Second Stage: Create the final, smaller image ---
-FROM openjdk:21-jre-slim
+# THIS IS THE CORRECTED LINE:
+FROM eclipse-temurin:21-jre-alpine
 
 # Set the working directory
 WORKDIR /app
