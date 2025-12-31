@@ -3,6 +3,7 @@ package dev.selva // Or whatever your package name is
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.response.* // <-- Make sure this import is here
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
@@ -24,6 +25,11 @@ fun Application.module() {
     val connections = Collections.synchronizedSet<Connection>(LinkedHashSet())
 
     routing {
+        // **NEW:** A simple GET route for the root URL
+        get("/") {
+            call.respondText("Oolma signaling server is running!")
+        }
+
         webSocket("/ws") {
             val thisConnection = Connection(this, UUID.randomUUID().toString())
             connections += thisConnection
@@ -55,4 +61,3 @@ fun Application.module() {
         }
     }
 }
-
